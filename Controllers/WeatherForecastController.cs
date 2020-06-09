@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace WebApi_Core.Controllers
 {
+    //WeatherForecast
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

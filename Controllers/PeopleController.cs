@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,8 +78,15 @@ namespace WebApi_Core.Controllers
             return p;
         }
 
+        [SwaggerOperation(
+             Summary = " Создает новый продукт ",
+             Description = " Требуются права администратора ",
+             OperationId = " CreateProduct ",
+             Tags = new[] { " Закупка ", " Продукты " }
+        )]
         [HttpPost]
-        [Consumes(MediaTypeNames.Application.Json)]
+        [Consumes(MediaTypeNames.Application.Json)]//формат запроса
+        [Produces(MediaTypeNames.Application.Json)]//фортам ответа
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<People> AddPeople(People item)
@@ -89,6 +97,10 @@ namespace WebApi_Core.Controllers
             return CreatedAtAction(nameof(GetByFam), new { fam = item.Fam }, item);
         }
 
+        /// <summary>
+        /// Deletes a specific People.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
