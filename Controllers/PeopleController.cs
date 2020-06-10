@@ -61,7 +61,7 @@ namespace WebApi_Core.Controllers
         [Route("{fam}")]
         public ActionResult<IEnumerable<People>> GetByFam(string fam)
         {
-            var p = _peoples.Where(p => p.Fam == fam).AsEnumerable<People>().ToList<People>();
+            var p = _peoples.Where(p => p.Fam == fam).ToList<People>();
             if (p.Count == 0)
                 return NotFound();
             return p;
@@ -72,7 +72,7 @@ namespace WebApi_Core.Controllers
         [HttpGet("notpetrov")]
         public ActionResult<IEnumerable<People>> GetList(int? age)
         {
-            var p = _peoples.Where(p => p.Fam != "petrov" && (age != null ? p.Age == age : p.Age > 0)).AsEnumerable<People>().ToList<People>();
+            var p = _peoples.Where(p => p.Fam != "petrov" && (age != null ? p.Age == age : p.Age > 0)).ToList<People>();
             if (p.Count == 0)
                 return NotFound();
             return p;
@@ -129,7 +129,7 @@ namespace WebApi_Core.Controllers
             
             try
             {
-                var p = _peoples.Where(p => p.Id == id).FirstOrDefault();
+                var p = _peoples.FirstOrDefault(p => p.Id == id);
                 if (p == null)
                     return NotFound();
             }
