@@ -35,7 +35,10 @@ namespace WebApi_Core.Controllers
         }
 
         //people
+        //people?format=xml
+        //people?format=js
         [HttpGet]
+        [FormatFilter]
         public ActionResult<IEnumerable<People>> Get()
         {
             return _peoples.AsEnumerable<People>().ToList<People>();
@@ -48,13 +51,27 @@ namespace WebApi_Core.Controllers
          * [Route("{id:int}")]
          * 
          */
-        public ActionResult<People> GetById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetById(int id)
         {
             var p = _peoples.Where(p => p.Id == id).FirstOrDefault();
             if (p == null)
-                return NotFound();
-            return p;
+                return new NotFoundResult();
+            return Ok(p);
         }
+
+        // GET /error_generate
+        [HttpGet("error_generate")]
+        public ContentResult About()
+        {
+            var t = User;
+            return Content("An API listing authors of docs.asp.net." + 8/Convert.ToInt32("0"));
+        }
+
+        // GET /version
+        [HttpGet("version")]
+        public string Version() => "Version 1.0.0";
 
         //people/petrov
         [HttpGet]
