@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
@@ -73,7 +74,7 @@ namespace WebApi_Core
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             app.UseSwagger();
             if (env.IsDevelopment())
@@ -98,6 +99,17 @@ namespace WebApi_Core
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.Run(async (context) =>
+            {
+                logger.LogCritical("LogCritical {0}", context.Request.Path);
+                logger.LogDebug("LogDebug {0}", context.Request.Path);
+                logger.LogError("LogError {0}", context.Request.Path);
+                logger.LogInformation("LogInformation {0}", context.Request.Path);
+                logger.LogWarning("LogWarning {0}", context.Request.Path);
+
+                await context.Response.WriteAsync("Hello World!");
             });
         }
     }

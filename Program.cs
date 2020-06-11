@@ -22,6 +22,11 @@ namespace WebApi_Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureLogging(logBuilder => 
+                {
+                    logBuilder.AddConsole();
+                    logBuilder.AddDebug();
                 });
     }
 #pragma warning restore CS1591

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Swashbuckle.AspNetCore.Annotations;
@@ -19,6 +20,7 @@ namespace WebApi_Core.Controllers
     public class PeopleController : ControllerBase
     {
         private readonly ILogger<PeopleController> _logger;
+        private readonly IConfiguration _config;
         private IList<People> _peoples = new List<People>()
         {
             new People() { Fam = "petrov", Im = "petr", Ot = "Petrovich", Age = 12, Id = 1 },
@@ -29,9 +31,13 @@ namespace WebApi_Core.Controllers
             new People() { Fam = "makarevich", Im = "makar", Ot = "Petrovich", Age = 20, Id = 6 }
         };
 
-        public PeopleController(ILogger<PeopleController> logger)
+        public PeopleController(ILogger<PeopleController> logger, IConfiguration config)
         {
             _logger = logger;
+            _config = config;
+
+            var allow = _config.GetSection("AllowedHosts"); //from appsettings
+            var test = _config.GetSection("Test"); //from appsettings.Development
         }
 
         //people
@@ -41,6 +47,8 @@ namespace WebApi_Core.Controllers
         [FormatFilter]
         public ActionResult<IEnumerable<People>> Get()
         {
+            _logger.LogCritical("LogCritical {0}", HttpContext.Request.Path);
+            _logger.LogDebug("LogDebug {0}", HttpContext.Request.Path);
             return _peoples.AsEnumerable<People>().ToList<People>();
         }
 
